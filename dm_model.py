@@ -132,7 +132,7 @@ def _generator_loss(features, gene_output, disc_fake_output, annealing):
     # See also https://github.com/xudonmao/Multi-class_GAN (vgg.py::loss_l2)
 
     # I.e. did we fool the discriminator?
-    gene_adversarial_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_fake_output, labels=tf.ones_like(disc_fake_output))        
+    gene_adversarial_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_fake_output, targets=tf.ones_like(disc_fake_output))
     gene_adversarial_loss = tf.reduce_mean(gene_adversarial_loss, name='gene_adversarial_loss')
 
     # I.e. does the result look like the feature?
@@ -154,8 +154,8 @@ def _generator_loss(features, gene_output, disc_fake_output, annealing):
 
 def _discriminator_loss(disc_real_output, disc_fake_output):
     # I.e. did we correctly identify the input as real or not?
-    disc_real_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_real_output, labels=tf.ones_like(disc_real_output))
-    disc_fake_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_fake_output, labels=tf.zeros_like(disc_fake_output))
+    disc_real_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_real_output, targets=tf.ones_like(disc_real_output))
+    disc_fake_loss = tf.nn.sigmoid_cross_entropy_with_logits(logits=disc_fake_output, targets=tf.zeros_like(disc_fake_output))
 
     disc_real_loss = tf.reduce_mean(disc_real_loss, name='disc_real_loss')
     disc_fake_loss = tf.reduce_mean(disc_fake_loss, name='disc_fake_loss')

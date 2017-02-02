@@ -19,7 +19,7 @@ def _save_image(train_data, feature, gene_output, batch, suffix, max_samples=Non
     td  = train_data
 
     clipped  = tf.maximum(tf.minimum(gene_output, 1.0), 0.0)
-    image    = tf.concat([feature, clipped], 2)
+    image    = tf.concat(2, [feature, clipped])
 
     image    = image[:max_samples,:,:,:]
     cols     = []
@@ -27,10 +27,10 @@ def _save_image(train_data, feature, gene_output, batch, suffix, max_samples=Non
     samples_per_col = max_samples//num_cols
     
     for c in range(num_cols):
-        col   = tf.concat([image[samples_per_col*c + i,:,:,:] for i in range(samples_per_col)], 0)
+        col   = tf.concat(0, [image[samples_per_col*c + i,:,:,:] for i in range(samples_per_col)])
         cols.append(col)
 
-    image   = tf.concat(cols, 1)
+    image   = tf.concat(1, cols)
     image   = td.sess.run(image)
 
     filename = 'batch%06d_%s.png' % (batch, suffix)
